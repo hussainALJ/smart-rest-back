@@ -1,11 +1,13 @@
 import express from "express";
+import "dotenv/config";
 
 const app = express();
+const PORT = process.env.PORT;
 
-app.use(express.json())
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("welcome to smart rest")
-})
+  res.send("welcome to smart rest");
+});
 
-app.listen(3000, () => console.log("working on http://localhost:3000"))
+app.listen(PORT, () => console.log(`working on http://localhost:${PORT}`));
