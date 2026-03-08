@@ -12,3 +12,90 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Users {
+  id Int @id @default(autoincrement())
+  username String @unique
+  password String
+  role Role 
+}
+
+enum Role {
+  Admin
+  Chef
+  Waiter
+  Cashier
+}
+
+model Tables {
+  id Int @id @default(autoincrement())
+  qr_code_url String
+  status TableStatus
+  sessions Sessions[]
+}
+
+enum TableStatus {
+  Available
+  Occupied
+}
+
+model Categories {
+  id Int @id @default(autoincrement())
+  name String
+  items MenuItems[]
+}
+
+model MenuItems {
+  id Int @id @default(autoincrement())
+  category Categories @relation(fields: [category_id], references: [id])
+  category_id Int
+  name String @unique
+  description String
+  price Int
+  image_url String
+  is_available Boolean
+  orders OrderItems[]
+}
+
+model Sessions {
+  id Int @id @default(autoincrement())
+  table Tables @relation(fields: [table_id], references: [id])
+  table_id Int
+  status SessionsStatus @default(Active)
+  created_at DateTime @default(now())
+  closed_at DateTime?
+  orders Orders[]
+}
+
+enum SessionsStatus {
+  Active
+  Closed
+}
+
+model Orders {
+  id Int @id @default(autoincrement())
+  session Sessions @relation(fields: [session_id], references: [id])
+  session_id Int
+  status OrderStatus @default(Pending)
+  created_at DateTime @default(now())
+  order_items OrderItems[]
+}
+
+enum OrderStatus {
+  Pending
+  Preparing
+  Ready
+  Served
+  Canceled
+}
+
+model OrderItems {
+  id Int @id @default(autoincrement())
+  order Orders @relation(fields: [order_id], references: [id])
+  order_id Int
+  item MenuItems @relation(fields: [menu_item_id], references: [id])
+  menu_item_id Int
+  quantity Int
+  notes String?
+  price_at_time Int
+}
