@@ -5,6 +5,6 @@ import { loginSchema } from "../validations/loginValidations.js";
 
 const authRoutes = express.Router();
 
-authRoutes.get("/", validate(loginSchema), loginController)
+authRoutes.post("/", validate(loginSchema), loginController)
 
 export default authRoutes
