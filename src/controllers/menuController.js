@@ -9,11 +9,11 @@ export const menuPostController = catchAsync(async (req, res, next) => {
       data: {
         name,
         description,
-        price: parseInt(price),
+        price,
         image_url,
         is_available,
         category: {
-          connect: {id: parseInt(category_id)}
+          connect: {id: category_id}
         },
       },
       include: {
