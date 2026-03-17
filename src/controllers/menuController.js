@@ -84,7 +84,7 @@ export const menuDeleteController = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await prisma.menuItems.delete({ where: { id: Number(id) } });
+    const deletedItem = await prisma.menuItems.delete({ where: { id: Number(id) } });
     res.status(200).json({
       status: "success",
       message: `Menu item "${deletedItem.name}" has been deleted successfully`,
