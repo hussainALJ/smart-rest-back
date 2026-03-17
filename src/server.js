@@ -3,6 +3,7 @@ import "dotenv/config";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./router/authRoutes.js";
 import menuRoutes from "./router/menuRoutes.js";
+import categoryRoutes from "./router/categoriesRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -14,8 +15,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth/login", authRoutes)
-
 app.use("/api/menu", menuRoutes)
+app.use("/api/categories", categoryRoutes)
 
 app.use(errorHandler)
 
