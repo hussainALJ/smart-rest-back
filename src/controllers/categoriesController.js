@@ -11,3 +11,16 @@ export const categoriesGetController = catchAsync(async (req, res) => {
     data: { categories },
   });
 });
+
+export const categoriesPostController = catchAsync(async (req, res) => {
+  const { name } = req.body;
+ 
+  const category = await prisma.categories.create({
+    data: { name },
+  });
+ 
+  res.status(201).json({
+    status: "success",
+    data: { category },
+  });
+});
