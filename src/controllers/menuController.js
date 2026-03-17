@@ -1,6 +1,18 @@
 import { catchAsync } from "../lib/catchAsync.js";
 import { prisma } from "../lib/prisma.js";
 
+export const menuGetController = catchAsync(async (req, res) => {
+  const items = await prisma.menuItems.findMany({
+    include: { category: true },
+    orderBy: { id: "asc" },
+  });
+ 
+  res.status(200).json({
+    status: "success",
+    data: { menuItems: items },
+  });
+});
+
 export const menuPostController = catchAsync(async (req, res, next) => {
   const { category_id, name, description, price, image_url, is_available } = req.body;
 
