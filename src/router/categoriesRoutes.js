@@ -1,5 +1,9 @@
 import express from "express";
-import { categoriesGetController, categoriesPostController } from "../controllers/categoriesController.js";
+import {
+  categoriesDeleteController,
+  categoriesGetController,
+  categoriesPostController 
+} from "../controllers/categoriesController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 import { validate } from "../middlewares/validate.js";
@@ -9,5 +13,6 @@ const categoryRoutes = express.Router();
 
 categoryRoutes.get("/", categoriesGetController);
 categoryRoutes.post("/", authenticate, isAdmin, validate(categorySchema), categoriesPostController);
+categoryRoutes.delete("/:id", authenticate, isAdmin, categoriesDeleteController);
 
 export default categoryRoutes;
