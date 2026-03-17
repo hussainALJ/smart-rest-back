@@ -79,3 +79,23 @@ export const menuPutController = catchAsync(async (req, res, next) => {
     throw error;
   }
 });
+
+export const menuDeleteController = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.menuItems.delete({ where: { id: Number(id) } });
+    res.status(200).json({
+      status: "success",
+      message: `Menu item "${deletedItem.name}" has been deleted successfully`,
+      data: { deletedItem },
+    });
+  } catch (error) {
+    if (error.code === "P2025") {
+      const err = new Error("Menu item not found");
+      err.statusCode = 404;
+      return next(err);
+    }
+    throw error;
+  }
+});

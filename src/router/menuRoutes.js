@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  menuDeleteController,
   menuGetController,
   menuPostController,
   menuPutController,
@@ -15,5 +16,6 @@ const menuRoutes = express.Router();
 menuRoutes.get("/", menuGetController);
 menuRoutes.post("/", authenticate, isAdmin, validate(menuSchema), menuPostController);
 menuRoutes.put("/:id", authenticate, isAdmin, validate(menuUpdateSchema), menuPutController);
+menuRoutes.delete("/:id", authenticate, isAdmin, menuDeleteController);
 
 export default menuRoutes;
