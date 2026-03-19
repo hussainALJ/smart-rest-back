@@ -12,6 +12,7 @@ import tableRoutes from "./router/tableRoutes.js";
 import sessionRoutes from "./router/sessionRoutes.js";
 import orderRoutes from "./router/orderRoutes.js";
 import statsRoutes from "./router/statsRoutes.js";
+import userRoutes from "./router/userRoutes.js";
 import { initSocket } from "./socket/index.js";
 
 if (!process.env.JWT_SECRET) {
@@ -48,6 +49,7 @@ app.use("/api/tables", tableRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/users", userRoutes);
  
 app.use(errorHandler);
  
