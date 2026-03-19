@@ -12,21 +12,7 @@ export const initSocket = (io) => {
         console.log(`[Socket] ${socket.id} joined table room: table_${data.table_id}`);
       }
     });
- 
-    socket.on("newOrder", (data) => {
-      io.to("Chef").emit("newOrder", data);
-      console.log(`[Socket] newOrder broadcast to Chef:`, data.order_id);
-    });
- 
-    socket.on("statusUpdate", (data) => {
-      io.to(`table_${data.table_id}`).emit("statusUpdate", data);
-      io.to("Cashier").emit("statusUpdate", data);
-      if (data.status === "Ready") {
-        io.to("Waiter").emit("statusUpdate", data);
-      }
-      console.log(`[Socket] statusUpdate broadcast:`, data);
-    });
- 
+  
     socket.on("callWaiter", (data) => {
       io.to("Waiter").emit("callWaiter", {
         table_id: data.table_id,
