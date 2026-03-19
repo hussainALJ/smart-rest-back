@@ -11,6 +11,7 @@ import categoryRoutes from "./router/categoriesRoutes.js";
 import tableRoutes from "./router/tableRoutes.js";
 import sessionRoutes from "./router/sessionRoutes.js";
 import orderRoutes from "./router/orderRoutes.js";
+import statsRoutes from "./router/statsRoutes.js";
 import { initSocket } from "./socket/index.js";
  
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/tables", tableRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/stats", statsRoutes);
  
 app.use(errorHandler);
  
