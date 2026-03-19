@@ -45,8 +45,12 @@ export const tablesDeleteController = catchAsync(async (req, res, next) => {
   const { id } = req.params;
  
   try {
-    await prisma.tables.delete({ where: { id: Number(id) } });
-    res.status(204).send();
+    const deletedItem =await prisma.tables.delete({ where: { id: Number(id) } });
+    res.status(200).json({
+      status: "success",
+      message: `Table "${deletedItem.id}" has been deleted successfully`,
+      data: { deletedItem },
+    });  
   } catch (error) {
     if (error.code === "P2025") {
       const err = new Error("Table not found");
