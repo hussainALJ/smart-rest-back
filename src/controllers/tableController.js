@@ -1,5 +1,6 @@
 import { catchAsync } from "../lib/catchAsync.js";
 import { prisma } from "../lib/prisma.js";
+import QRCode from "qrcode";
 
 export const tablesGetController = catchAsync(async (req, res, next) => {
   const tables = await prisma.tables.findMany({
