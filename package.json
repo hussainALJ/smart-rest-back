@@ -5,8 +5,9 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src src/server.js"
+    "build": "npx prisma generate",
+    "start": "node --experimental-strip-types src/server.js",
+    "dev": "nodemon --watch src --exec 'node --experimental-strip-types' src/server.js"
   },
   "repository": {
     "type": "git",

@@ -13,13 +13,20 @@ import sessionRoutes from "./router/sessionRoutes.js";
 import orderRoutes from "./router/orderRoutes.js";
 import statsRoutes from "./router/statsRoutes.js";
 import { initSocket } from "./socket/index.js";
+
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is not set");
+}
+if (!process.env.FRONTEND_URL) {
+  throw new Error("FRONTEND_URL environment variable is not set");
+}
  
 const app = express();
 const httpServer = createServer(app);
  
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "*",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -27,7 +34,7 @@ const io = new Server(httpServer, {
 app.set("io", io);
 initSocket(io);
  
-app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
  
 app.get("/", (req, res) => {

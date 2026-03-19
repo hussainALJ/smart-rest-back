@@ -53,8 +53,14 @@ export const tablesDeleteController = catchAsync(async (req, res, next) => {
     });  
   } catch (error) {
     if (error.code === "P2025") {
-      const err = new Error("Table not found");
-      err.statusCode = 404;
+    const err = new Error("Table not found");
+    err.statusCode = 404;
+    return next(err);
+    }
+    
+    if (error.code === "P2003") {
+      const err = new Error("Cannot delete table: it has existing sessions");
+      err.statusCode = 409;
       return next(err);
     }
     throw error;
