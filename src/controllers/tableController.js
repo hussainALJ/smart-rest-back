@@ -1,7 +1,7 @@
 import { catchAsync } from "../lib/catchAsync.js";
 import { prisma } from "../lib/prisma.js";
 
-export const tableGetController = catchAsync(async (req, res, next) => {
+export const tablesGetController = catchAsync(async (req, res, next) => {
   const tables = await prisma.tables.findMany({
     orderBy: { id: "asc" },
     include: {
