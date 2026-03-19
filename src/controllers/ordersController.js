@@ -67,7 +67,7 @@ export const ordersPostController = catchAsync(async (req, res, next) => {
  
   const io = req.app.get("io");
   if (io) {
-    io.emit("newOrder", {
+    io.to("Chef").emit("newOrder", {
       order_id: order.id,
       table_id: order.session.table_id,
       table_number: order.session.table.id,
@@ -130,7 +130,10 @@ export const ordersStatusPutController = catchAsync(async (req, res, next) => {
  
     const io = req.app.get("io");
     if (io) {
-      io.emit("statusUpdate", {
+      io.to("Waiter")
+        .to("Cashier")
+        .to(`table_${order.session.table_id}`)
+        .emit("statusUpdate", {
         order_id: order.id,
         status: order.status,
         session_id: order.session_id,
