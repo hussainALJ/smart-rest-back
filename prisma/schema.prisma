@@ -86,6 +86,7 @@ enum OrderStatus {
   Preparing
   Ready
   Served
+  Paid
   Canceled
 }
 

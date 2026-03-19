@@ -105,7 +105,8 @@ export const ordersStatusPutController = catchAsync(async (req, res, next) => {
   const allowedTransitions = {
     Chef: ["Preparing", "Ready", "Canceled"],
     Waiter: ["Served"],
-    Admin: ["Preparing", "Ready", "Served", "Canceled"],
+    Cashier: ["Paid"],
+    Admin: ["Preparing", "Ready", "Served", "Paid", "Canceled"],
   };
  
   const allowed = allowedTransitions[role] || [];

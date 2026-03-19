@@ -7,11 +7,11 @@ export const statsGetController = catchAsync(async (req, res) => {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
  
-  // Daily sales total (from served/paid orders today)
+  // Daily sales total (from paid orders today)
   const todayOrderItems = await prisma.orderItems.findMany({
     where: {
       order: {
-        status: { in: ["Served"] },
+        status: { in: ["Paid"] },
         created_at: { gte: today, lt: tomorrow },
       },
     },
