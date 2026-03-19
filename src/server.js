@@ -5,6 +5,7 @@ import authRoutes from "./router/authRoutes.js";
 import menuRoutes from "./router/menuRoutes.js";
 import categoryRoutes from "./router/categoriesRoutes.js";
 import tableRoutes from "./router/tableRoutes.js";
+import sessionRoutes from "./router/sessionRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -19,6 +20,7 @@ app.use("/api/auth/login", authRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/tables", tableRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.use(errorHandler);
 
