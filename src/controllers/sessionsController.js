@@ -51,3 +51,85 @@ export const sessionStartController = catchAsync(async (req, res, next) => {
     data: { session },
   });
 });
+
+export const sessionBillController = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+ 
+  const session = await prisma.sessions.findUnique({
+    where: { id: Number(id) },
+    include: {
+      table: true,
+      orders: {
+        where: { status: { not: "Canceled" } },
+        include: {
+          order_items: {
+            include: { item: true },
+          },
+        },
+      },
+    },
+  });
+ 
+  if (!session) {
+    const err = new Error("Session not found");
+    err.statusCode = 404;
+    return next(err);
+  }
+ 
+  const total = session.orders.reduce((sum, order) => {
+    return (
+      sum +
+      order.order_items.reduce((s, oi) => s + oi.price_at_time * oi.quantity, 0)
+    );
+  }, 0);
+ 
+  res.status(200).json({
+    status: "success",
+    data: {
+      session: {
+        id: session.id,
+        table: session.table,
+        status: session.status,
+        created_at: session.created_at,
+        orders: session.orders,
+        total,
+      },
+    },
+  });
+});
+
+export const sessionCheckoutController = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+ 
+  const session = await prisma.sessions.findUnique({
+    where: { id: Number(id) },
+  });
+ 
+  if (!session) {
+    const err = new Error("Session not found");
+    err.statusCode = 404;
+    return next(err);
+  }
+ 
+  if (session.status === "Closed") {
+    const err = new Error("Session is already closed");
+    err.statusCode = 400;
+    return next(err);
+  }
+ 
+  await prisma.$transaction([
+    prisma.sessions.update({
+      where: { id: Number(id) },
+      data: { status: "Closed", closed_at: new Date() },
+    }),
+    prisma.tables.update({
+      where: { id: session.table_id },
+      data: { status: "Available" },
+    }),
+  ]);
+ 
+  res.status(200).json({
+    status: "success",
+    message: "Checkout complete. Table is now available.",
+  });
+});
