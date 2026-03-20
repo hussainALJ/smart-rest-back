@@ -116,6 +116,21 @@ export const sessionCheckoutController = catchAsync(async (req, res, next) => {
     err.statusCode = 400;
     return next(err);
   }
+
+    const blockingOrders = await prisma.orders.findMany({
+    where: {
+      session_id: Number(id),
+      status: { notIn: ["Served", "Paid", "Canceled"] },
+    },
+  });
+
+  if (blockingOrders.length > 0) {
+    const err = new Error(
+      "Cannot checkout — some orders are still pending, preparing, or ready. Please wait until all orders are served."
+    );
+    err.statusCode = 400;
+    return next(err);
+  }
  
   await prisma.$transaction([
     prisma.sessions.update({
@@ -125,6 +140,13 @@ export const sessionCheckoutController = catchAsync(async (req, res, next) => {
     prisma.tables.update({
       where: { id: session.table_id },
       data: { status: "Available" },
+    }),
+    prisma.orders.updateMany({
+      where: {
+        session_id: Number(id),
+        status: { notIn: ["Canceled", "Paid"] },
+      },
+      data: { status: "Paid" },
     }),
   ]);
  
