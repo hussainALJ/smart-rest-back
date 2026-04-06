@@ -1,6 +1,7 @@
 import { prisma } from "../src/lib/prisma.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import QRCode from "qrcode";
 
 dotenv.config();
 
@@ -93,15 +94,17 @@ async function main() {
  
   // Create sample tables
   for (let i = 1; i <= 5; i++) {
-    const existing = await prisma.tables.findFirst({ where: { id: i } });
-    if (!existing) {
-      await prisma.tables.create({
-        data: {
-          qr_code_url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/menu?table=${i}`,
-          status: "Available",
-        },
-      });
-    }
+    const menuUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/menu?table=${i}`;
+    const qrCodeDataUrl = await QRCode.toDataURL(menuUrl);
+
+    await prisma.tables.upsert({
+      where: { id: i },
+      update: {},
+      create: {
+        qr_code_url: qrCodeDataUrl,
+        status: "Available",
+      },
+    });
   }
   console.log("Tables created");
  
