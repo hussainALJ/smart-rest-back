@@ -8,7 +8,7 @@ CREATE TYPE "TableStatus" AS ENUM ('Available', 'Occupied');
 CREATE TYPE "SessionsStatus" AS ENUM ('Active', 'Closed');
 
 -- CreateEnum
-CREATE TYPE "OrderStatus" AS ENUM ('Pending', 'Preparing', 'Ready', 'Served', 'Canceled');
+CREATE TYPE "OrderStatus" AS ENUM ('Pending', 'Preparing', 'Ready', 'Served', 'Paid', 'Canceled');
 
 -- CreateTable
 CREATE TABLE "Users" (
